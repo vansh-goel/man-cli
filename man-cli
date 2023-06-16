@@ -5,28 +5,28 @@ purple='\033[1;35m'
 yellow='\033[1;33m'
 cyan="\033[1;36m"
 
-Help()
-{
- echo "This is a simple and minimal script to read Manga"
- echo "							"
- echo "-h         Displays Help"
- echo "-s         Displays History"
- echo "-r         Remove Old Chapters"
- echo "     						"
- echo "If you want to remove older chapters edit the rem() the number after -n indicates all but the [n] latest chapters to be deleted "
- echo "							"
- echo "[Created by Vansh]"
-}
+# Help()
+# {
+#  echo "This is a simple and minimal script to read Manga"
+#  echo "							"
+#  echo "-h         Displays Help"
+#  echo "-s         Displays History"
+#  echo "-r         Remove Old Chapters"
+#  echo "     						"
+#  echo "If you want to remove older chapters edit the rem() the number after -n indicates all but the [n] latest chapters to be deleted "
+#  echo "							"
+#  echo "[Created by Vansh]"
+# }
 
-remh()
-{
- rm -rf ~/.cache/man-cli/hist.txt
-}
+# remh()
+# {
+#  rm -rf ~/.cache/man-cli/hist.txt
+# }
 
-rem()
-{
- ls -tl ~/.cache/man-cli/*cbz | tail -n +6 |xargs rm -rf
-}
+# rem()
+# {
+#  ls -tl ~/.cache/man-cli/*cbz | tail -n +6 |xargs rm -rf
+# }
 
     if [ ! -d ~/.cache/man-cli ]; then
         mkdir ~/.cache/man-cli
@@ -69,9 +69,21 @@ if [ ! -f ~/.cache/man-cli/$re.cbz  ]; then
 #Getting Images and displaying the manga
 (curl -s $final | pup "img.img-loading" | grep -Eo "https://cm.blazefast.co\/[0-9a-zA-Z\/,]{38}.jpg") > ~/.cache/man-cli/temp.txt
 echo -e "${yellow}Downloading the Chapter....."
-for((i = 1; i < $(wc -l < ~/.cache/man-cli/temp.txt); i++))do
-	wget -q -O  ~/.cache/man-cli/$i.jpg $(cat < ~/.cache/man-cli/temp.txt | head -$i | tail -1)
+for ((i = 1; i < $(wc -l < ~/.cache/man-cli/temp.txt); i++)) do
+	axel -oc  ~/.cache/man-cli/$i.jpg $(cat < ~/.cache/man-cli/temp.txt | head -$i | tail -1)
 done
+# for((i = 1; i < $(wc -l < ~/.cache/man-cli/temp.txt); i += 2))do
+# 	axel -oc  ~/.cache/man-cli/$i.jpg $(cat < ~/.cache/man-cli/temp.txt | head -$i | tail -1)
+# done &
+# for((i = 1; i < $(wc -l < ~/.cache/man-cli/temp.txt); i += 3))do
+# 	axel -oc  ~/.cache/man-cli/$i.jpg $(cat < ~/.cache/man-cli/temp.txt | head -$i | tail -1)
+# done &
+# for((i = 1; i < $(wc -l < ~/.cache/man-cli/temp.txt); i += 5))do
+# 	axel -oc  ~/.cache/man-cli/$i.jpg $(cat < ~/.cache/man-cli/temp.txt | head -$i | tail -1)
+# done &
+# for((i = 1; i < $(wc -l < ~/.cache/man-cli/temp.txt); i += 10))do
+# 	axel -oc  ~/.cache/man-cli/$i.jpg $(cat < ~/.cache/man-cli/temp.txt | head -$i | tail -1)
+# done
 echo -e  "${cyan}Downloading Completed, Opening the file...."
 rm -rf ~/.cache/man-cli/temp.txt
 zip -q ~/.cache/man-cli/$re.cbz ~/.cache/man-cli/*.jpg
